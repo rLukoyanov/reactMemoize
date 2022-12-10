@@ -1,11 +1,16 @@
-import { memo, useState } from "react";
+import { memo, useMemo, useState } from "react";
 import "./App.css";
 
-function Swatch({ color }) {
-  console.log("Swatch redered:" + color);
+function Swatch({ params }) {
+  console.log("Swatch redered:" + params.color);
   return (
     <div
-      style={{ margin: 2, width: 75, backgroundColor: color, height: 75 }}
+      style={{
+        margin: 2,
+        width: 75,
+        backgroundColor: params.color,
+        height: 75,
+      }}
     ></div>
   );
 }
@@ -15,17 +20,21 @@ const MemoSwatch = memo(Swatch);
 function App() {
   const [appRenderIndex, setAppRenderIndex] = useState(0);
   const [color, setColor] = useState("red");
+
   console.log("app rendered:" + appRenderIndex);
+
+  const params = useMemo(() => ({ color }), [color]);
+
   return (
     <div className="App">
       <button onClick={() => setAppRenderIndex(appRenderIndex + 1)}>
         Re-render app
       </button>
       <button onClick={() => setColor(color === "red" ? "blue" : "red")}>
-        change color 
+        change color
       </button>
       <div>
-        <MemoSwatch color={color}></MemoSwatch>
+        <MemoSwatch params={params}></MemoSwatch>
       </div>
     </div>
   );
